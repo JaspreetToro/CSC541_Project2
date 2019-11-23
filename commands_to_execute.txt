@@ -1,0 +1,61 @@
+-----------------------------------------------------------------------------------------------
+Commands to run MB Based Algorithm: 
+-----------------------------------------------------------------------------------------------
+1. Clean the mininet 
+	sudo mn -c
+2. Copying the files
+	copy dijkstra_ryu_mb.py in ryu/app folder and fattree4.py in mininet/custom folder
+3. Running the controller 
+	ryu-manager dijkstra_ryu_mb.py --observe-links
+4. Running the fattree
+	sudo mn --custom fattree4.py --mac --controller=remote --topo mytopo --switch ovsk,stp=1,protocols=OpenFlow13 --arp
+5. xterm to check the operation 
+	xterm h1 h7
+6. Check the Bandwidth
+	(i) Run the below the command in h7 node
+		iperf -u -s -p 5566 -i 1 -f m -e
+	(ii) Run the below command in h1 node
+		iperf -u -c 10.0.0.7 -p 5566 -t 300 -b10m -e 
+7. Control + C to exit from the operation.
+8. Redirecting the results to the result file
+	iperf -s -p 5566 -i 1> result
+	Control + C to stop the operation
+	more result 				// to check the results
+9. Post-Processing the results
+	cat result | grep sec | head -15 | tr - " " | awk '{print $4, $8}' > new_results
+10. Command to install the gnuplot 
+	sudo apt-get install gnuplot-qt
+11. Plotting the graph 
+	gnuplot
+	plot "new_results" title "tcp flow" with linespoints
+
+-----------------------------------------------------------------------------------------------------------
+Commands to run VM based Algorithm:
+-----------------------------------------------------------------------------------------------------------
+1. Clean the mininet 
+	sudo mn -c
+2. Copying the files
+	copy dijkstra_ryu_vm.py in ryu/app folder and fattree4.py in mininet/custom folder
+3. Running the controller 
+	ryu-manager dijkstra_ryu_vm.py --observe-links
+4. Run the fattree
+	sudo mn --custom fattree4.py --mac --controller=remote --topo mytopo --switch ovsk,stp=1,protocols=OpenFlow13 --arp
+5. xterm to check the operation 
+	xterm h1 h7
+6. Check the Bandwidth
+	(i) Run the below the command in h7 node
+		iperf -u -s -p 5566 -i 1 -f m -e			
+	(ii) Run the below command in h1 node
+		iperf -u -c 10.0.0.7 -p 5566 -t 300 -b10m -e 
+7. Control + C to exit from the operation.
+8. Redirecting the results to the result file
+	iperf -s -p 5566 -i 1> result
+	Control + C to stop the operation
+	more result 				// to check the results
+9. Post-Processing the results
+	cat result | grep sec | head -15 | tr - " " | awk '{print $4, $8}' > new_results
+10. Command to install the gnuplot 
+	sudo apt-get install gnuplot-qt
+11. Plotting the graph 
+	gnuplot
+	plot "new_results" title "tcp flow" with linespoints
